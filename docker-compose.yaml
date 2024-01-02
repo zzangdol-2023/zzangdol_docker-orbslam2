@@ -1,0 +1,22 @@
+version: '0.1'
+
+services:
+  orbslam2-ros-container:
+    container_name: orbslam2-ros-container # 컨테이너 이름
+    image: seunmul/orbslam2:ros-melodic # 이미지 이름
+    # build:
+    # Dockerfile이 있는 경로를 넣어주기
+    # context: . # Dockerfile이 있는 경로
+    # dockerfile: dockerfile # Dockerfile 스크립트 파일 이름
+    # command: /bin/bash # 컨테이너 시작시 실행할 명령어
+    privileged: true
+    stdin_open: true # docker run -i 와 같음=>  Keep STDIN open even if not attached | 없으면 스크립트 전부 실행하고 멈춤 백그라운드 없이 멈춤
+    tty: true # docker run -t 와 같음 => Allocate a pseudo-TTY  | 없으면 스크립트 전부 실행하고 백그라운드 없이 멈춤
+    network_mode: host # docker run --network=host => host와 같은 네트워크 사용 | ports와 충돌나니 두 항목 중 하나만 사용
+    runtime: nvidia # nvidia-docker2 사용
+    environment:
+      - DISPLAY=host.docker.internal:0 # for x11 forwarding
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix # for x11 forwarding
+      # - /home/${USER}/Desktop/docker_orbslam2/ros:/root/catkin_ws/src/orb_slam_2_ros/ros # for shared folder <-- use your own path
+      # - /home/${USER}/Desktop/docker_shared_src/:/share # for shared folder <-- use your own path
